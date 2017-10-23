@@ -29,6 +29,15 @@ public:
   ///* state covariance matrix
   MatrixXd P_;
 
+  ///* lidar noise covariance matrix
+  MatrixXd R_;
+
+  ///* radar noise covariance matrix
+  MatrixXd R_radar_;
+
+  ///* augment sigma points matrix
+  MatrixXd Xsig_aug_;
+
   ///* predicted sigma points matrix
   MatrixXd Xsig_pred_;
 
@@ -65,6 +74,9 @@ public:
   ///* Augmented state dimension
   int n_aug_;
 
+  ///* Number of Sigma points
+  int n_sig_;
+
   ///* Sigma point spreading parameter
   double lambda_;
 
@@ -73,6 +85,9 @@ public:
 
   ///* the current NIS for laser
   double NIS_laser_;
+
+  MatrixXd H_;
+  MatrixXd I_;
 
   /**
    * Constructor
@@ -108,6 +123,14 @@ public:
    * @param meas_package The measurement at k+1
    */
   void UpdateRadar(MeasurementPackage meas_package);
+
+  double NormalizeAngle(double angle);
+
+  void GenerateSigmaPoints(MatrixXd* Xsig_out);
+
+  void SigmaPointPrediction(double delta_t, MatrixXd Xsig_aug);
+
+  void PredictMeanAndCovariance();
 };
 
 #endif /* UKF_H */
